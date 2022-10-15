@@ -139,13 +139,13 @@ namespace DustyPig.Utils
 #endif
         }
 
-        public static Task DownloadStringAsync(string url) =>
+        public static Task<string> DownloadStringAsync(string url) =>
             DownloadStringAsync(url, null, default);
 
-        public static Task DownloadStringAsync(string url, IDictionary<string, string> headers) =>
+        public static Task<string> DownloadStringAsync(string url, IDictionary<string, string> headers) =>
             DownloadStringAsync(url, headers, default);
 
-        public static Task DownloadStringAsync(string url, CancellationToken cancellationToken) =>
+        public static Task<string> DownloadStringAsync(string url, CancellationToken cancellationToken) =>
             DownloadStringAsync(url, null, cancellationToken);
 
 
@@ -168,13 +168,13 @@ namespace DustyPig.Utils
 #endif
         }
 
-        public static Task DownloadStringAsync(Uri uri) =>
+        public static Task<string> DownloadStringAsync(Uri uri) =>
             DownloadStringAsync(uri, null, default);
 
-        public static Task DownloadStringAsync(Uri uri, IDictionary<string, string> headers) =>
+        public static Task<string> DownloadStringAsync(Uri uri, IDictionary<string, string> headers) =>
             DownloadStringAsync(uri, headers, default);
 
-        public static Task DownloadStringAsync(Uri uri, CancellationToken cancellationToken) =>
+        public static Task<string> DownloadStringAsync(Uri uri, CancellationToken cancellationToken) =>
             DownloadStringAsync(uri, null, cancellationToken);
 
 
@@ -195,13 +195,13 @@ namespace DustyPig.Utils
 #endif
         }
 
-        public static Task DownloadDataAsync(string url) =>
+        public static Task<byte[]> DownloadDataAsync(string url) =>
             DownloadDataAsync(url, null, default);
 
-        public static Task DownloadDataAsync(string url, IDictionary<string, string> headers) =>
+        public static Task<byte[]> DownloadDataAsync(string url, IDictionary<string, string> headers) =>
             DownloadDataAsync(url, headers, default);
 
-        public static Task DownloadDataAsync(string url, CancellationToken cancellationToken) =>
+        public static Task<byte[]> DownloadDataAsync(string url, CancellationToken cancellationToken) =>
             DownloadDataAsync(url, null, cancellationToken);
 
 
@@ -222,13 +222,13 @@ namespace DustyPig.Utils
 #endif
         }
 
-        public static Task DownloadDataAsync(Uri uri) =>
+        public static Task<byte[]> DownloadDataAsync(Uri uri) =>
             DownloadDataAsync(uri, null, default);
 
-        public static Task DownloadDataAsync(Uri uri, IDictionary<string, string> headers) =>
+        public static Task<byte[]> DownloadDataAsync(Uri uri, IDictionary<string, string> headers) =>
             DownloadDataAsync(uri, headers, default);
 
-        public static Task DownloadDataAsync(Uri uri, CancellationToken cancellationToken) =>
+        public static Task<byte[]> DownloadDataAsync(Uri uri, CancellationToken cancellationToken) =>
             DownloadDataAsync(uri, null, cancellationToken);
 
 
