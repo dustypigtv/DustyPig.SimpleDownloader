@@ -97,20 +97,21 @@ namespace DustyPig.Utils
                 {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1 || NET5_0_OR_GREATER
                     var read = await contentStream.ReadAsync(new Memory<byte>(buffer), cancellationToken).ConfigureAwait(false);
-                    if (read == 0)
-                        break;
-                    await fileStream.WriteAsync(new ReadOnlyMemory<byte>(buffer, 0, read), cancellationToken).ConfigureAwait(false);
+                    if (read > 0)
+                        await fileStream.WriteAsync(new ReadOnlyMemory<byte>(buffer, 0, read), cancellationToken).ConfigureAwait(false);
 #else
                     var read = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false);
-                    if (read == 0)
-                        break;
-                    await fileStream.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
+                    if (read > 0)
+                        await fileStream.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
 #endif
                     if (progress != null)
                     {
                         totalDownloaded += read;
                         progress.Report(new DownloadProgress(totalDownloaded, totalBytes, started));
                     }
+
+                    if (read <= 0)
+                        break;
                 }
             }
             finally
