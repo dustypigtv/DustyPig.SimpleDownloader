@@ -187,6 +187,73 @@ namespace DustyPig.Utils
 
 
 
+        /// <summary>
+        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// </summary>
+        public static async Task<long> GetDownloadSizeAsync(string url, IDictionary<string, string> headers, CancellationToken cancellationToken)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Head, url);
+            SetHeaders(request, headers);
+            using var response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
+            return response.Content.Headers.ContentLength ?? -1;
+        }
+
+        /// <summary>
+        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// </summary>
+        public static Task<long> GetDownloadSizeAsync(string url) =>
+            GetDownloadSizeAsync(url, null, default);
+
+        /// <summary>
+        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// </summary>
+        public static Task<long> GetDownloadSizeAsync(string url, IDictionary<string, string> headers) =>
+            GetDownloadSizeAsync(url, headers, default);
+
+        /// <summary>
+        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// </summary>
+        public static Task<long> GetDownloadSizeAsync(string url, CancellationToken cancellationToken) =>
+            GetDownloadSizeAsync(url, null, cancellationToken);
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// Uses a HEAD request to get the content size, or -1 if not returned by the server
+        /// </summary>
+        public static async Task<long> GetDownloadSizeAsync(Uri uri, IDictionary<string, string> headers, CancellationToken cancellationToken)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Head, uri);
+            SetHeaders(request, headers);
+            using var response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
+            return response.Content.Headers.ContentLength ?? -1;
+        }
+
+        /// <summary>
+        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// </summary>
+        public static Task<long> GetDownloadSizeAsync(Uri uri) =>
+            GetDownloadSizeAsync(uri, null, default);
+
+        /// <summary>
+        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// </summary>
+        public static Task<long> GetDownloadSizeAsync(Uri uri, IDictionary<string, string> headers) =>
+            GetDownloadSizeAsync(uri, headers, default);
+
+        /// <summary>
+        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// </summary>
+        public static Task<long> GetDownloadSizeAsync(Uri uri, CancellationToken cancellationToken) =>
+            GetDownloadSizeAsync(uri, null, cancellationToken);
+
+
+
 
 
 
