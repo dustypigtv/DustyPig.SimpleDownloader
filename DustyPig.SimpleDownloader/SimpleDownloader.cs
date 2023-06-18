@@ -1,5 +1,4 @@
-﻿using DustyPig.SimpleDownloader;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -73,13 +72,15 @@ namespace DustyPig.Utils
 
         private static async Task DownloadFileAsync(HttpResponseMessage response, string filename, IProgress<DownloadProgress> progress, CancellationToken cancellationToken)
         {
+            long started = DateTime.Now.Ticks;
+            
 #if NET5_0_OR_GREATER
             using var contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
 #else
             using var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 #endif
 
-            long totalBytes = response.Content.Headers.ContentLength ?? 0;
+            long totalBytes = response.Content.Headers.ContentLength ?? -1;
             long totalDownloaded = 0;
 
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1 || NET5_0_OR_GREATER
@@ -108,7 +109,7 @@ namespace DustyPig.Utils
                     if (progress != null)
                     {
                         totalDownloaded += read;
-                        progress.Report(new DownloadProgress(totalDownloaded, totalBytes));
+                        progress.Report(new DownloadProgress(totalDownloaded, totalBytes, started));
                     }
                 }
             }
