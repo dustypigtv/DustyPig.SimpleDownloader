@@ -188,7 +188,7 @@ namespace DustyPig.Utils
 
 
         /// <summary>
-        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
         /// </summary>
         public static async Task<long> GetDownloadSizeAsync(string url, IDictionary<string, string> headers, CancellationToken cancellationToken)
         {
@@ -199,19 +199,19 @@ namespace DustyPig.Utils
         }
 
         /// <summary>
-        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
         /// </summary>
         public static Task<long> GetDownloadSizeAsync(string url) =>
             GetDownloadSizeAsync(url, null, default);
 
         /// <summary>
-        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
         /// </summary>
         public static Task<long> GetDownloadSizeAsync(string url, IDictionary<string, string> headers) =>
             GetDownloadSizeAsync(url, headers, default);
 
         /// <summary>
-        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
         /// </summary>
         public static Task<long> GetDownloadSizeAsync(string url, CancellationToken cancellationToken) =>
             GetDownloadSizeAsync(url, null, cancellationToken);
@@ -224,7 +224,7 @@ namespace DustyPig.Utils
 
 
         /// <summary>
-        /// Uses a HEAD request to get the content size, or -1 if not returned by the server
+        /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
         /// </summary>
         public static async Task<long> GetDownloadSizeAsync(Uri uri, IDictionary<string, string> headers, CancellationToken cancellationToken)
         {
@@ -235,19 +235,19 @@ namespace DustyPig.Utils
         }
 
         /// <summary>
-        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
         /// </summary>
         public static Task<long> GetDownloadSizeAsync(Uri uri) =>
             GetDownloadSizeAsync(uri, null, default);
 
         /// <summary>
-        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
         /// </summary>
         public static Task<long> GetDownloadSizeAsync(Uri uri, IDictionary<string, string> headers) =>
             GetDownloadSizeAsync(uri, headers, default);
 
         /// <summary>
-        /// Uses a HEAD request to get the content size, or -1 if unknown
+        /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
         /// </summary>
         public static Task<long> GetDownloadSizeAsync(Uri uri, CancellationToken cancellationToken) =>
             GetDownloadSizeAsync(uri, null, cancellationToken);
