@@ -1,13 +1,10 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1 || NET5_0_OR_GREATER
-using System.Buffers;
-#endif
 
 namespace DustyPig.Utils
 {
@@ -74,36 +71,21 @@ namespace DustyPig.Utils
         {
             long started = DateTime.Now.Ticks;
             
-#if NET5_0_OR_GREATER
             using var contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-#else
-            using var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-#endif
 
             long totalBytes = response.Content.Headers.ContentLength ?? -1;
             long totalDownloaded = 0;
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1 || NET5_0_OR_GREATER
             byte[] buffer = ArrayPool<byte>.Shared.Rent(COPYTO_BUFFER_SIZE);
-#else
-            byte[] buffer = new byte[COPYTO_BUFFER_SIZE];
-#endif
-
             using var fileStream = CreateFile(filename);
 
             try
             {
                 while (true)
                 {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1 || NET5_0_OR_GREATER
                     var read = await contentStream.ReadAsync(new Memory<byte>(buffer), cancellationToken).ConfigureAwait(false);
                     if (read > 0)
                         await fileStream.WriteAsync(new ReadOnlyMemory<byte>(buffer, 0, read), cancellationToken).ConfigureAwait(false);
-#else
-                    var read = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false);
-                    if (read > 0)
-                        await fileStream.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
-#endif
                     if (progress != null)
                     {
                         totalDownloaded += read;
@@ -116,9 +98,7 @@ namespace DustyPig.Utils
             }
             finally
             {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1 || NET5_0_OR_GREATER
                 ArrayPool<byte>.Shared.Return(buffer);
-#endif
             }
         }
 
