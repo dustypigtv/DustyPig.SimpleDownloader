@@ -239,14 +239,21 @@ namespace DustyPig.Utils
 
 
 
-        public static async Task<string> DownloadStringAsync(string url, IDictionary<string, string> headers)
+        public static async Task<string> DownloadStringAsync(string url, IDictionary<string, string> headers, CancellationToken cancellationToken)
         {
-            using var response = await GetResponseAsync(url, headers, default).ConfigureAwait(false);
-            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            using var response = await GetResponseAsync(url, headers, cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         }
+
+        public static Task<string> DownloadStringAsync(string url, IDictionary<string, string> headers) =>
+            DownloadStringAsync(url, headers, default);
+
+        public static Task<string> DownloadStringAsync(string url, CancellationToken cancellationToken) =>
+            DownloadStringAsync(url, null, cancellationToken);
+
 
         public static Task<string> DownloadStringAsync(string url) =>
-            DownloadStringAsync(url, null);
+            DownloadStringAsync(url, null, default);
 
 
 
@@ -255,29 +262,42 @@ namespace DustyPig.Utils
 
 
 
-        public static async Task<string> DownloadStringAsync(Uri uri, IDictionary<string, string> headers)
+        public static async Task<string> DownloadStringAsync(Uri uri, IDictionary<string, string> headers, CancellationToken cancellationToken)
         {
-            using var response = await GetResponseAsync(uri, headers, default).ConfigureAwait(false);
-            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            using var response = await GetResponseAsync(uri, headers, cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         }
+
+        public static Task<string> DownloadStringAsync(Uri uri, IDictionary<string, string> headers) =>
+            DownloadStringAsync(uri, headers, default);
+
+        public static Task<string> DownloadStringAsync(Uri uri, CancellationToken cancellationToken) =>
+            DownloadStringAsync(uri, null, cancellationToken);
+
 
         public static Task<string> DownloadStringAsync(Uri uri) =>
-            DownloadStringAsync(uri, null);
+            DownloadStringAsync(uri, null, default);
 
 
 
 
 
 
-
-        public static async Task<byte[]> DownloadDataAsync(string url, IDictionary<string, string> headers)
+        public static async Task<byte[]> DownloadDataAsync(string url, IDictionary<string, string> headers, CancellationToken cancellationToken)
         {
-            using var response = await GetResponseAsync(url, headers, default).ConfigureAwait(false);
-            return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            using var response = await GetResponseAsync(url, headers, cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public static Task<byte[]> DownloadDataAsync(string url) =>
-            DownloadDataAsync(url, null);
+        public static Task<string> DownloadDataAsync(string url, IDictionary<string, string> headers) =>
+           DownloadStringAsync(url, headers, default);
+
+        public static Task<string> DownloadDataAsync(string url, CancellationToken cancellationToken) =>
+            DownloadStringAsync(url, null, cancellationToken);
+
+
+        public static Task<string> DownloadDataAsync(string url) =>
+            DownloadStringAsync(url, null, default);
 
 
 
@@ -286,14 +306,21 @@ namespace DustyPig.Utils
 
 
 
-
-        public static async Task<byte[]> DownloadDataAsync(Uri uri, IDictionary<string, string> headers)
+        public static async Task<byte[]> DownloadDataAsync(Uri uri, IDictionary<string, string> headers, CancellationToken cancellationToken)
         {
-            using var response = await GetResponseAsync(uri, headers, default).ConfigureAwait(false);
-            return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            using var response = await GetResponseAsync(uri, headers, cancellationToken).ConfigureAwait(false);
+            return await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public static Task<byte[]> DownloadDataAsync(Uri uri) =>
-            DownloadDataAsync(uri, null);
+        public static Task<string> DownloadDataAsync(Uri uri, IDictionary<string, string> headers) =>
+          DownloadStringAsync(uri, headers, default);
+
+        public static Task<string> DownloadDataAsync(Uri uri, CancellationToken cancellationToken) =>
+            DownloadStringAsync(uri, null, cancellationToken);
+
+
+        public static Task<string> DownloadDataAsync(Uri uri) =>
+            DownloadStringAsync(uri, null, default);
+
     }
 }
