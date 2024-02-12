@@ -289,15 +289,15 @@ namespace DustyPig.Utils
             return await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public static Task<string> DownloadDataAsync(string url, IDictionary<string, string> headers) =>
-           DownloadStringAsync(url, headers, default);
+        public static Task<byte[]> DownloadDataAsync(string url, IDictionary<string, string> headers) =>
+           DownloadDataAsync(url, headers, default);
 
-        public static Task<string> DownloadDataAsync(string url, CancellationToken cancellationToken) =>
-            DownloadStringAsync(url, null, cancellationToken);
+        public static Task<byte[]> DownloadDataAsync(string url, CancellationToken cancellationToken) =>
+            DownloadDataAsync(url, null, cancellationToken);
 
 
-        public static Task<string> DownloadDataAsync(string url) =>
-            DownloadStringAsync(url, null, default);
+        public static Task<byte[]> DownloadDataAsync(string url) =>
+            DownloadDataAsync(url, null, default);
 
 
 
@@ -312,15 +312,15 @@ namespace DustyPig.Utils
             return await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public static Task<string> DownloadDataAsync(Uri uri, IDictionary<string, string> headers) =>
-          DownloadStringAsync(uri, headers, default);
+        public static Task<byte[]> DownloadDataAsync(Uri uri, IDictionary<string, string> headers) =>
+          DownloadDataAsync(uri, headers, default);
 
-        public static Task<string> DownloadDataAsync(Uri uri, CancellationToken cancellationToken) =>
-            DownloadStringAsync(uri, null, cancellationToken);
+        public static Task<byte[]> DownloadDataAsync(Uri uri, CancellationToken cancellationToken) =>
+            DownloadDataAsync(uri, null, cancellationToken);
 
 
-        public static Task<string> DownloadDataAsync(Uri uri) =>
-            DownloadStringAsync(uri, null, default);
+        public static Task<byte[]> DownloadDataAsync(Uri uri) =>
+            DownloadDataAsync(uri, null, default);
 
     }
 }
