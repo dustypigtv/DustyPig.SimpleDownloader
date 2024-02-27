@@ -1,23 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
-	  <LangVersion>12</LangVersion>
-
-	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
-	  <NoWarn>$(NoWarn);1591,CS1573,,IDE0090</NoWarn>
-	  <Authors>DustyPig.tv</Authors>
-	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-	  <Description>DustyPig Simple Downloader Utility</Description>
-	  <Copyright>DustyPig.tv</Copyright>
-	  <PackageProjectUrl>https://github.com/dustypigtv/DustyPig.SimpleDownloader</PackageProjectUrl>
-	  <RepositoryUrl>https://github.com/dustypigtv/DustyPig.SimpleDownloader.git</RepositoryUrl>
-	  <RepositoryType>git</RepositoryType>
+	<PropertyGroup>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+		<LangVersion>12</LangVersion>
+		<NoWarn>$(NoWarn);1591,CS1573,,IDE0090</NoWarn>
 
 
-	  <!-- Leave the revision as zero, it will be set by github actions -->
-	  <Version>3.2.0.0</Version>
+		<!-- Leave the revision as zero, it will be set by github actions -->
+		<Version>3.2.0.0</Version>
 	  
-  </PropertyGroup>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<Authors>DustyPig.tv</Authors>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>DustyPig Simple Downloader Utility</Description>
+		<Copyright>DustyPig.tv</Copyright>
+		<PackageProjectUrl>https://github.com/dustypigtv/DustyPig.SimpleDownloader</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/dustypigtv/DustyPig.SimpleDownloader.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+	</ItemGroup>
 
 </Project>

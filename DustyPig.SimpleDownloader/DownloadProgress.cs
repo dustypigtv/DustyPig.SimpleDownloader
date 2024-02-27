@@ -13,7 +13,7 @@ namespace DustyPig.Utils
 
             long ticks = DateTime.Now.Ticks - startedTicks;
             BytesPerSecond = ticks <= 0 ? double.NaN : DownloadedBytes / TimeSpan.FromTicks(ticks).TotalSeconds;
-          
+
             RemainingSeconds = BytesRemaining < 0 || double.IsNaN(BytesPerSecond) ? -1 : TimeSpan.FromSeconds(BytesRemaining / BytesPerSecond).TotalSeconds;
         }
 

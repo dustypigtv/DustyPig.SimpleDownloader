@@ -70,7 +70,7 @@ namespace DustyPig.Utils
         private static async Task DownloadFileAsync(HttpResponseMessage response, string filename, IProgress<DownloadProgress> progress, CancellationToken cancellationToken)
         {
             long started = DateTime.Now.Ticks;
-            
+
             using var contentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
 
             long totalBytes = response.Content.Headers.ContentLength ?? -1;
@@ -105,7 +105,7 @@ namespace DustyPig.Utils
         public static async Task DownloadFileAsync(string url, string filename, IDictionary<string, string> headers, IProgress<DownloadProgress> progress, CancellationToken cancellationToken)
         {
             using var response = await GetResponseAsync(url, headers, cancellationToken).ConfigureAwait(false);
-            await DownloadFileAsync(response, filename, progress, cancellationToken).ConfigureAwait(false);   
+            await DownloadFileAsync(response, filename, progress, cancellationToken).ConfigureAwait(false);
         }
 
         public static Task DownloadFileAsync(string url, string filename) =>
