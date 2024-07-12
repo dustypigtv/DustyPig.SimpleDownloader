@@ -108,6 +108,7 @@ public static class SimpleDownloader
     {
         using var response = await GetResponseAsync(uri, headers, cancellationToken).ConfigureAwait(false);
         await DownloadFileAsync(response, fileInfo, progress, cancellationToken).ConfigureAwait(false);
+        fileInfo.Refresh();
     }
 
     public static Task DownloadFileAsync(Uri uri, string filename, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default) =>
@@ -119,6 +120,7 @@ public static class SimpleDownloader
     {
         using var response = await GetResponseAsync(url, headers, cancellationToken).ConfigureAwait(false);
         await DownloadFileAsync(response, fileInfo, progress, cancellationToken).ConfigureAwait(false);
+        fileInfo.Refresh();
     }
 
     public static Task DownloadFileAsync(string url, string filename, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default) =>
