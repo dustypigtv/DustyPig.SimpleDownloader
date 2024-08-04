@@ -13,11 +13,9 @@ public static class SimpleDownloader
     const int FILE_BUFFER_SIZE = 4096;
     const int COPYTO_BUFFER_SIZE = 81920;
 
-    static readonly HttpClient _httpClient = new HttpClient();
-
 
     static void SetHeaders(HttpRequestMessage request, IDictionary<string, string> headers)
-    {
+    {       
         if (headers == null)
             return;
 
@@ -39,23 +37,23 @@ public static class SimpleDownloader
         return ret;
     }
 
-    static async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    static async Task<HttpResponseMessage> GetResponseAsync(HttpClient httpClient, HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+        var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         return response;
     }
 
-    static async Task<HttpResponseMessage> GetResponseAsync(string url, IDictionary<string, string> headers, CancellationToken cancellationToken)
+    static async Task<HttpResponseMessage> GetResponseAsync(HttpClient httpClient, string url, IDictionary<string, string> headers, CancellationToken cancellationToken)
     {
         using var request = CreateRequest(url, headers);
-        return await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
+        return await GetResponseAsync(httpClient, request, cancellationToken).ConfigureAwait(false);
     }
 
-    static async Task<HttpResponseMessage> GetResponseAsync(Uri uri, IDictionary<string, string> headers, CancellationToken cancellationToken)
+    static async Task<HttpResponseMessage> GetResponseAsync(HttpClient httpClient, Uri uri, IDictionary<string, string> headers, CancellationToken cancellationToken)
     {
         using var request = CreateRequest(uri, headers);
-        return await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
+        return await GetResponseAsync(httpClient, request, cancellationToken).ConfigureAwait(false);
     }
 
 
@@ -104,27 +102,27 @@ public static class SimpleDownloader
 
 
 
-    public static async Task DownloadFileAsync(Uri uri, FileInfo fileInfo, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default)
+    public static async Task DownloadFileAsync(this HttpClient httpClient, Uri uri, FileInfo fileInfo, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default)
     {
-        using var response = await GetResponseAsync(uri, headers, cancellationToken).ConfigureAwait(false);
+        using var response = await GetResponseAsync(httpClient, uri, headers, cancellationToken).ConfigureAwait(false);
         await DownloadFileAsync(response, fileInfo, progress, cancellationToken).ConfigureAwait(false);
         fileInfo.Refresh();
     }
 
-    public static Task DownloadFileAsync(Uri uri, string filename, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default) =>
-        DownloadFileAsync(uri, new FileInfo(filename), headers, progress, cancellationToken);
+    public static Task DownloadFileAsync(this HttpClient httpClient, Uri uri, string filename, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default) =>
+        DownloadFileAsync(httpClient, uri, new FileInfo(filename), headers, progress, cancellationToken);
 
 
 
-    public static async Task DownloadFileAsync(string url, FileInfo fileInfo, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default)
+    public static async Task DownloadFileAsync(this HttpClient httpClient, string url, FileInfo fileInfo, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default)
     {
-        using var response = await GetResponseAsync(url, headers, cancellationToken).ConfigureAwait(false);
+        using var response = await GetResponseAsync(httpClient, url, headers, cancellationToken).ConfigureAwait(false);
         await DownloadFileAsync(response, fileInfo, progress, cancellationToken).ConfigureAwait(false);
         fileInfo.Refresh();
     }
 
-    public static Task DownloadFileAsync(string url, string filename, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default) =>
-        DownloadFileAsync(url, new FileInfo(filename), headers, progress, cancellationToken);
+    public static Task DownloadFileAsync(this HttpClient httpClient, string url, string filename, IDictionary<string, string> headers = null, IProgress<DownloadProgress> progress = null, CancellationToken cancellationToken = default) =>
+        DownloadFileAsync(httpClient, url, new FileInfo(filename), headers, progress, cancellationToken);
 
 
 
@@ -138,11 +136,11 @@ public static class SimpleDownloader
     /// <summary>
     /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
     /// </summary>
-    public static async Task<long> GetDownloadSizeAsync(string url, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
+    public static async Task<long> GetDownloadSizeAsync(this HttpClient httpClient, string url, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
     {
         using var request = new HttpRequestMessage(HttpMethod.Head, url);
         SetHeaders(request, headers);
-        using var response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
+        using var response = await GetResponseAsync(httpClient, request, cancellationToken).ConfigureAwait(false);
         return response.Content.Headers.ContentLength ?? -1;
     }
 
@@ -151,11 +149,11 @@ public static class SimpleDownloader
     /// <summary>
     /// Uses a HEAD request to get the content size, returns -1 if not specified by the server
     /// </summary>
-    public static async Task<long> GetDownloadSizeAsync(Uri uri, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
+    public static async Task<long> GetDownloadSizeAsync(this HttpClient httpClient, Uri uri, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
     {
         using var request = new HttpRequestMessage(HttpMethod.Head, uri);
         SetHeaders(request, headers);
-        using var response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
+        using var response = await GetResponseAsync(httpClient, request, cancellationToken).ConfigureAwait(false);
         return response.Content.Headers.ContentLength ?? -1;
     }
 
@@ -166,17 +164,17 @@ public static class SimpleDownloader
 
 
 
-    public static async Task<string> DownloadStringAsync(string url, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
+    public static async Task<string> DownloadStringAsync(this HttpClient httpClient, string url, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
     {
-        using var response = await GetResponseAsync(url, headers, cancellationToken).ConfigureAwait(false);
+        using var response = await GetResponseAsync(httpClient, url, headers, cancellationToken).ConfigureAwait(false);
         return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
     }
 
 
 
-    public static async Task<string> DownloadStringAsync(Uri uri, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
+    public static async Task<string> DownloadStringAsync(this HttpClient httpClient, Uri uri, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
     {
-        using var response = await GetResponseAsync(uri, headers, cancellationToken).ConfigureAwait(false);
+        using var response = await GetResponseAsync(httpClient, uri, headers, cancellationToken).ConfigureAwait(false);
         return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
     }
 
@@ -185,18 +183,18 @@ public static class SimpleDownloader
 
 
 
-    public static async Task<byte[]> DownloadDataAsync(string url, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
+    public static async Task<byte[]> DownloadDataAsync(this HttpClient httpClient, string url, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
     {
-        using var response = await GetResponseAsync(url, headers, cancellationToken).ConfigureAwait(false);
+        using var response = await GetResponseAsync(httpClient, url, headers, cancellationToken).ConfigureAwait(false);
         return await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
     }
 
 
 
 
-    public static async Task<byte[]> DownloadDataAsync(Uri uri, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
+    public static async Task<byte[]> DownloadDataAsync(this HttpClient httpClient, Uri uri, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
     {
-        using var response = await GetResponseAsync(uri, headers, cancellationToken).ConfigureAwait(false);
+        using var response = await GetResponseAsync(httpClient, uri, headers, cancellationToken).ConfigureAwait(false);
         return await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
     }
 
